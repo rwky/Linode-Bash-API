@@ -1,0 +1,93 @@
+#!/bin/bash
+APIURL="https://api.linode.com/"
+APIKEY=""
+COMMAND=""
+DATA=""
+VERBOSE=0
+VERSION="20110619"
+while getopts "hk:f:c:d:vi:F:" opt; do
+case $opt in
+h)
+#help
+cat <<EOT
+Linode Bash API $VERSION
+options:
+-h      Help
+-v      Verbose
+-F arg     Response format, default json, options wddx or human
+-k arg      API Key to use
+-f arg      File to get API key from, key must be the only string on the first line
+-c arg      The command to run, for a list of commands see http://www.linode.com/api
+-d arg      A quote string containing the data to send in "foo=bar&foo2=bar2" format
+-i arg      Get data from file if  - is used get data from stdin
+
+If -k or -f are ommited or don't provide an API key then the following loctions are checked
+$HOME/.linde_api
+/etc/linode/api
+
+Detiails of commands you can run can be found at http://www.linode.com/api/
+EOT
+exit 0
+;;
+k)
+#api key
+APIKEY=$OPTARG
+;;
+f)
+#file for api key
+APIKEY=`head -1 $OPTARG`
+;;
+v)
+#verbose
+VERBOSE=1
+;;
+c)
+COMMAND=$OPTARG
+;;
+d)
+#data for post command
+DATA=$OPTARG
+;;
+i)
+#read data from file, if - read from stdin
+DATA=`cat $OPTARG`
+;;
+F)
+#response format
+DATA="$DATA&api_responseFormat=$OPTARG"
+;;
+\?)
+#unknown option
+exit 1
+;;
+esac
+done
+
+if [ -z $APIKEY ]
+then
+if [ -f /etc/linode_api ]
+then
+APIKEY=`cat /etc/linode_api`
+fi
+if [ -f $HOME/.linode_api ]
+then
+APIKEY=`cat $HOME/.linode_api`
+fi
+fi
+
+if [ -z $APIKEY ]
+then
+echo "No API key specified" > 2
+exit 1
+fi
+
+DATA="$DATA&api_key=$APIKEY&api_action=$COMMAND"
+
+if [ $VERBOSE -eq 1 ]
+then
+echo "Running curl -d $DATA $APIURL"
+fi
+
+curl -d "$DATA" "$APIURL"
+echo ""
+
