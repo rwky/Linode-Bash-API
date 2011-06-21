@@ -1,4 +1,8 @@
 #!/bin/bash
+#Linode Bash API https://github.com/rwky/Linode-Bash-API
+#Released under the Simplified BSD License see the LICENSE file at the above url
+#README also found at the above url
+
 APIURL="https://api.linode.com/"
 APIKEY=""
 COMMAND=""
