@@ -3,12 +3,14 @@
 #Released under the Simplified BSD License see the LICENSE file at the above url
 #README also found at the above url
 
+set -e
+
 APIURL="https://api.linode.com/"
 APIKEY=""
 COMMAND=""
 DATA=""
 VERBOSE=0
-VERSION="20110619"
+VERSION="20110621"
 
 #check if curl is installed
 hash curl 2>/dev/null || { echo "Curl is required but is not installed or not in PATH.  Aborting." >&2; exit 1; }
@@ -22,7 +24,7 @@ Linode Bash API $VERSION
 options:
 -h      Help
 -v      Verbose
--F arg     Response format, default json, options wddx or human
+-F arg     Response format, default bash (easily readable in a shell, formatted from json), options, json wddx or human (html)
 -k arg      API Key to use
 -f arg      File to get API key from, key must be the only string on the first line
 -c arg      The command to run, for a list of commands see http://www.linode.com/api
@@ -102,6 +104,37 @@ then
 echo "Running curl -d $DATA $APIURL"
 fi
 
-curl -d "$DATA" "$APIURL"
-echo ""
+RESPONSE=$(curl -s -d "$DATA" "$APIURL")
+
+if [[ $DATA != *api_responseFormat* ]]
+then
+    RESPONSE=$(echo "$RESPONSE" | sed 's/,/ /g' | sed 's/\([{}]\)/ \1 /g')
+    
+    INDENT=0
+    for R in $RESPONSE
+    do
+        if [[ $R == *{* ]]
+        then
+            ((INDENT++))
+        fi
+        
+        while ((i<INDENT))
+        do
+        echo -n "   "
+        ((i++))
+        done
+        i=0
+        
+        if [[ $R == *}* ]]
+        then
+            ((INDENT--))
+        fi
+        
+        echo "$R"
+    done
+
+else
+    echo "$RESPONSE"
+fi
+
 
