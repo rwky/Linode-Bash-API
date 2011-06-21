@@ -5,6 +5,10 @@ COMMAND=""
 DATA=""
 VERBOSE=0
 VERSION="20110619"
+
+#check if curl is installed
+hash curl 2>/dev/null || { echo "Curl is required but is not installed or not in PATH.  Aborting." >&2; exit 1; }
+
 while getopts "hk:f:c:d:vi:F:" opt; do
 case $opt in
 h)
@@ -77,7 +81,13 @@ fi
 
 if [ -z $APIKEY ]
 then
-echo "No API key specified" > 2
+echo "No API key specified" >&2
+exit 1
+fi
+
+if [ -z $COMMAND ]
+then
+echo "No command specified" >&2
 exit 1
 fi
 
