@@ -34,3 +34,7 @@ Examples
 ./linode_bash_api -c linode.disk.update -d "linodeid=<id from 1.a>&diskid=<id from 1.b>&label=Label&isreadonly=1"
 This will set the disk label to "Label" and make the disk read only.
 
+Contribute
+----------
+To contirbute to this program please feel free to fork it and submit a pull request or raise an issue.
+If you feel generous and would like to donate to the project you can send money via paypal to admin {at} rwky {dot} net or flattr me at https://flattr.com/thing/319205/Linode-Bash-API
