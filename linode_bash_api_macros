@@ -1,0 +1,79 @@
+function test_macro
+{
+  echo "This is the test macro the arguments passed are $@"
+}
+
+function toggle_disk_read_only {
+#$1 linode label
+#$2 linode disk label
+
+if [ $HELP -eq 1 ]
+then
+cat <<EOT
+
+Help for macro toggle_disk_read_only
+Requires two arguments
+The first is the Linode label, it is case sensitive but may only be partial, i.e. if your Linode is named "mytoast123" then you can simply use "toast"
+The second argument is the disk label, again it's case sensitive and can be parital
+If the Linode and disk are found then the disk will be marked as read only if it's writable and vice versa
+Example: linode_bash_api -m 'toggle_disk_read_only toast toaster' would toggle the ISREADONLY attribute of the disk toaster on linode toast
+EOT
+return
+fi
+
+if [ -z $1 ]
+then
+  echo "You must specify the linode label"
+  exit 1
+fi
+
+if [ -z $2 ]
+then
+  echo "You must specify the disk label"
+  exit 1
+fi
+
+if [ $VERBOSE -eq 1 ]
+then
+  echo "Toggling readonly attribute of disk $2 on linode $1 read only"
+  echo "Retrieving linode ID"
+fi
+
+COMMAND="linode.list"
+DATA="api_responseFormat=json"
+RESPONSE=`api_request`
+LINODEID=$( echo "$RESPONSE" | sed "s/.*$1[^}]*LINODEID\":\([0-9]*\).*.*/\1/" )
+if [ "$LINODEID" == "$RESPONSE" ]
+then
+ echo "Linode with label containing $1 not found"
+ exit 1
+fi
+
+if [ $VERBOSE -eq 1 ]
+then
+  echo "Retrieving disk ID"
+fi
+
+COMMAND="linode.disk.list"
+DATA="api_responseFormat=json&linodeid=$LINODEID"
+RESPONSE=`api_request`
+declare -a SETTINGS=($( echo "$RESPONSE" | sed "s/.*ISREADONLY\":\([0-1]\).*$2[^}].*DISKID\":\([0-9]*\).*/\1 \2/" ))
+
+if [ "$RESPONSE" == "${SETTINGS[*]}" ]
+then
+ echo "Disk with label $2 not found"
+ exit 1
+fi
+
+COMMAND="linode.disk.update"
+if [ "${SETTINGS[0]}" == "0" ]
+then
+DATA="linodeid=$LINODEID&diskid=${SETTINGS[1]}&isreadonly=1"
+echo "Disk is writable marking read only"
+else
+DATA="linodeid=$LINODEID&diskid=${SETTINGS[1]}&isreadonly=0"
+echo "Disk is readonly marking writable"
+fi
+api_request
+
+}
