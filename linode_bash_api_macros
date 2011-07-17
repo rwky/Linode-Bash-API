@@ -77,3 +77,22 @@ fi
 api_request
 
 }
+
+
+function list_labels_and_ids {
+  COMMAND="linode.list"
+  RESPONSE=`api_request`
+  for l in $RESPONSE
+  do
+    if [[ $l == *LABEL* ]]
+    then
+      echo -n "Label: "
+      echo -n "$l" | sed 's/"LABEL":"\(.*\)"/\1/' | tr -d "\n"
+    fi
+    if [[ $l == *LINODEID* ]]
+    then
+      echo -n " ID: "
+      echo $l | sed 's/"LINODEID"://'
+    fi
+  done
+}
