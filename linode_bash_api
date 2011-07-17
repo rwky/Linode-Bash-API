@@ -125,6 +125,13 @@ fi
 
 RESPONSE=$(curl -s -d "$DATA" "$APIURL")
 
+if [[ $RESPONSE != *\"ERRORARRAY\":\[\]* ]]
+then
+echo "API ERROR!" >&2
+echo "$RESPONSE" | sed 's/.*\(ERRORARRAY[^}]*\).*/\1}]/' >&2
+exit 1
+fi
+
 if [[ $DATA != *api_responseFormat* ]]
 then
     RESPONSE=$(echo "$RESPONSE" | sed 's/,/ /g' | sed 's/\([{}]\)/ \1 /g')
