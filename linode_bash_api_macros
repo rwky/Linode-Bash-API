@@ -96,3 +96,133 @@ function list_labels_and_ids {
     fi
   done
 }
+
+function get_domain_id {
+  #$1 domain
+  
+  if [ $HELP -eq 1 ]
+  then
+  cat <<EOT
+  
+  Help for macro get_domain_id
+  Requires one argument
+  The argument is the domain you wish to get the ID for
+  Example: linode_bash_api -m 'get_domain_id toast.com' returns the ID for the doamin toast.com
+EOT
+  return
+  fi
+  
+  if [ -z $1 ]
+  then
+    echo "You must specify the domain"
+    exit 1
+  fi
+
+  COMMAND="domain.list"
+  RESPONSE=`api_request`
+  for l in $RESPONSE
+  do
+  if [[ $l == *DOMAINID* ]]
+  then
+    ID=$(echo -n "$l" | sed 's/"DOMAINID":\(.*\)/\1/' | tr -d "\n")
+  fi
+  if [[ $l == *DOMAIN* ]] && [[ $l == *$1* ]]
+  then
+    echo $ID
+  fi
+  done
+}
+
+function get_domain_resource_id
+{
+  #$1 domain id
+  #$2 the resource name to get
+  
+  if [ $HELP -eq 1 ]
+  then
+  cat <<EOT
+  
+  Help for macro get_domain_resource_id
+  Requires three arguments
+  The argument is the domain you wish to get the ID for
+  Example: linode_bash_api -m 'get_domain_resource_id toast.com www' returns the resource ID for the doamin www.toast.com
+EOT
+  return
+  fi
+  
+  if [ -z $1 ]
+  then
+    echo "You must specify the domain id"
+    exit 1
+  fi
+  
+  if [ -z $2 ]
+  then
+    echo "You must specify the resource name"
+    exit 1
+  fi
+  
+  COMMAND="domain.resource.list"
+  DATA="domainid=$1"
+  RESPONSE=`api_request`
+  for l in $RESPONSE
+  do
+  if [[ $l == *RESOURCEID* ]]
+  then
+    ID=$(echo -n "$l" | sed 's/"RESOURCEID":\(.*\)/\1/' | tr -d "\n")
+  fi
+  if [[ $l == *NAME* ]] && [[ $l == *$2* ]]
+  then
+    echo $ID
+  fi
+  done
+}
+
+function update_domain_resource_target
+{
+  #$1 domain name
+  #$2 the resource name to get
+  #$3 the new target
+  
+  if [ $HELP -eq 1 ]
+  then
+  cat <<EOT
+  
+  Help for macro update_domain_resource_target
+  Requires three arguments
+  The argument is the domain you wish to get the ID for
+  Example: linode_bash_api -m 'update_domain_resource_target toast.com www 8.8.8.8' sets the target of www.toast.com to 8.8.8.8
+EOT
+  return
+  fi
+  
+  if [ -z $1 ]
+  then
+    echo "You must specify the domain name"
+    exit 1
+  fi
+  
+  if [ -z $2 ]
+  then
+    echo "You must specify the resource name"
+    exit 1
+  fi
+  
+  if [ -z $3 ]
+  then
+    echo "You must specify the new target"
+    exit 1
+  fi
+  
+  DOMAINID=$(get_domain_id $1)
+  RESOURCEID=$(get_domain_resource_id $DOMAINID $2)
+  if [ $VERBOSE -eq 1 ]
+  then
+    echo "Updating $DOMAINID $RESOURCEID to $3"
+  fi
+  COMMAND="domain.resource.update"
+  DATA="domainid=$DOMAINID&resourceid=$RESOURCEID&target=$3"
+  api_request
+  
+  
+}
