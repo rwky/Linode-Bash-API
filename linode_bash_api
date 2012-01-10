@@ -145,19 +145,19 @@ then
     do
         if [[ $R == *{* ]]
         then
-            ((INDENT++))
+            INDENT=$INDENT+1
         fi
-        
+        i=0
         while ((i<INDENT))
         do
-        echo -n "   "
-        ((i++))
+            echo -n "   "
+            i=$i+1
         done
         i=0
         
         if [[ $R == *}* ]]
         then
-            ((INDENT--))
+            INDENT=$INDENT-1
         fi
         
         echo "$R"
