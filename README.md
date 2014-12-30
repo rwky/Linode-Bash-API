@@ -32,9 +32,9 @@ Examples
 ##### List your linodes using
 ``./linode_bash_api -c linode.list``
 ##### Get the linode ID from the returned results and run
-``./linode_bash_api -c linode.disk.list -d "linodeid=<id from 1.a>"``
+``./linode_bash_api -c linode.disk.list -d "linodeid=<id from first step>"``
 ##### Get the the disk ID from the returned results and run
-``./linode_bash_api -c linode.disk.update -d "linodeid=<id from 1.a>&diskid=<id from 1.b>&label=Label&isreadonly=1"``
+``./linode_bash_api -c linode.disk.update -d "linodeid=<id from second step>&diskid=<id from second step>&label=Label&isreadonly=1"``
 This will set the disk label to "Label" and make the disk read only.
 
 Contribute
