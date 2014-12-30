@@ -81,7 +81,7 @@ options:
 -m "arg"    Run a macro, a quote encased string with at least one space separated argument which is the macro name, subsequent arguments will be passed to the macro as arguments. Macros are bash functions kept in /etc/linode_bash_api_macros or ~/.linode_bash_api_macros
 
 If -k or -f are ommited or don't provide an API key then the following loctions are checked
-$HOME/.linode_api
+~/.linode_api
 /etc/linode/api
 
 Details of commands you can run can be found at http://www.linode.com/api/
@@ -99,9 +99,9 @@ if [ -f /etc/linode_api ]
 then
 APIKEY=`cat /etc/linode_api`
 fi
-if [ -f $HOME/.linode_api ]
+if [ -f ~/.linode_api ]
 then
-APIKEY=`cat $HOME/.linode_api`
+APIKEY=`cat ~/.linode_api`
 fi
 fi
 
