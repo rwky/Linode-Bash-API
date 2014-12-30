@@ -65,7 +65,7 @@ exit 1
 esac
 done
 
-if [ $HELP -eq 1 ]
+if [ $HELP -eq 1 ] || [ -z $1 ]
 then
 cat <<EOT
 Linode Bash API $VERSION

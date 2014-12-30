@@ -18,9 +18,9 @@ options:
 -c arg      The command to run, for a list of commands see http://www.linode.com/api
 -d arg      A quote string containing the data to send in "foo=bar&foo2=bar2" format
 -i arg      Get data from file if  - is used get data from stdin
-```
-If ``-k`` or ``-f`` are ommited or don't provide an API key then the following loctions are checked:
-```
+
+If -k or -f are ommited or don't provide an API key then the following loctions are checked:
+
 /Users/rowan/.linode_api
 /etc/linode/api
 ```
