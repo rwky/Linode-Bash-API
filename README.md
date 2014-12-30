@@ -2,7 +2,7 @@ This is no longer maintained
 
 Where to find a list of commands
 -------------------------------
-You can find an up to date list of all Linode API commands at [http://www.linode.com/api/]
+You can find an up to date list of all Linode API commands at http://www.linode.com/api/
 
 Using the program
 ----------------
