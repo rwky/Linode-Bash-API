@@ -20,8 +20,10 @@ options:
 -i arg      Get data from file if  - is used get data from stdin
 ```
 If ``-k`` or ``-f`` are ommited or don't provide an API key then the following loctions are checked
+```
 /Users/rowan/.linode_api
 /etc/linode/api
+```
 
 Detiails of commands you can run can be found at http://www.linode.com/api/
 
