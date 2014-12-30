@@ -2,11 +2,11 @@ This is no longer maintained
 
 Where to find a list of commands
 -------------------------------
-You can find an up to date list of all Linode API commands at http://www.linode.com/api/ 
+You can find an up to date list of all Linode API commands at [http://www.linode.com/api/]
 
 Using the program
 ----------------
-Run linode_bash_api -h for help it will output the following:
+Run ``linode_bash_api -h`` for help it will output the following:
 ```
 Linode Bash API 20110619
 options:
@@ -19,7 +19,7 @@ options:
 -d arg      A quote string containing the data to send in "foo=bar&foo2=bar2" format
 -i arg      Get data from file if  - is used get data from stdin
 ```
-If ``-k`` or ``-f`` are ommited or don't provide an API key then the following loctions are checked
+If ``-k`` or ``-f`` are ommited or don't provide an API key then the following loctions are checked:
 ```
 /Users/rowan/.linode_api
 /etc/linode/api
