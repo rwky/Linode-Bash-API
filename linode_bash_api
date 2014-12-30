@@ -84,7 +84,9 @@ If -k or -f are ommited or don't provide an API key then the following loctions 
 ~/.linode_api
 /etc/linode/api
 
-Details of commands you can run can be found at http://www.linode.com/api/
+examples:
+./linode_bash_api -F human -c test.echo -d "foo=bar"
+
 EOT
 if [ -z "$MACRO" ]
 then
